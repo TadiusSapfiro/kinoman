@@ -1,10 +1,11 @@
+import {MONTH_NAMES, emotes} from "../const.js";
 const createGenreMarkup = (genre) => {
   return `<span class="film-details__genre">${genre}</span>`;
 };
 
 const createCommentMarkup = (comment) => {
   const {emoji, text, author, date} = comment;
-
+  const fullDate = `${date.getFullYear()} ${MONTH_NAMES[date.getMonth()]} ${date.getDate()}`;
   return (
     `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
@@ -14,14 +15,14 @@ const createCommentMarkup = (comment) => {
         <p class="film-details__comment-text">${text}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${date}</span>
+          <span class="film-details__comment-day">${fullDate}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
     </li>`);
 };
 
-const emotes = [`smile`, `sleeping`, `puke`, `angry`];
+
 const createEmojiMarkup = (emoji) => {
   return (
     `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}">
@@ -31,8 +32,9 @@ const createEmojiMarkup = (emoji) => {
 };
 
 export const createDetailsTemplate = (card) => {
-  const {title, titleOriginal, rating, director, actors, writers, releaseDate, country, duration, genres, photo, age, description, comments} = card;
-
+  const {title, titleOriginal, rating, director, actors, writers, date, country, duration, genres, photo, description, comments} = card;
+  const fullDate = `${date.getFullYear()} ${MONTH_NAMES[date.getMonth()]} ${date.getDate()}`;
+  const age = new Date().getFullYear() - date.getFullYear();
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
       <div class="form-details__top-container">
@@ -41,7 +43,7 @@ export const createDetailsTemplate = (card) => {
         </div>
         <div class="film-details__info-wrap">
           <div class="film-details__poster">
-            <img class="film-details__poster-img" src="images/posters/${photo}.jpg" alt="${title}">
+            <img class="film-details__poster-img" src="images/posters/${photo}" alt="${title}">
   
             <p class="film-details__age">${age}</p>
           </div>
@@ -73,7 +75,7 @@ export const createDetailsTemplate = (card) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
-                <td class="film-details__cell">${releaseDate}</td>
+                <td class="film-details__cell">${fullDate}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
@@ -92,7 +94,7 @@ export const createDetailsTemplate = (card) => {
             </table>
   
             <p class="film-details__film-description">
-              ${description}
+              ${description.join(`. `)}
             </p>
           </div>
         </div>
